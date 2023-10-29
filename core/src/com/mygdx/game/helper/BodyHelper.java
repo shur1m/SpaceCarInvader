@@ -10,7 +10,7 @@ public class BodyHelper {
                                   boolean isStatic,
                                   float density,
                                   World world,
-                                  ContactType type
+                                  Object userdata
     ){
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = isStatic ? BodyDef.BodyType.StaticBody : BodyDef.BodyType.DynamicBody;
@@ -24,7 +24,7 @@ public class BodyHelper {
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = density;
-        body.createFixture(fixtureDef).setUserData(type);
+        body.createFixture(fixtureDef).setUserData(userdata);
 
         shape.dispose();
         return body;

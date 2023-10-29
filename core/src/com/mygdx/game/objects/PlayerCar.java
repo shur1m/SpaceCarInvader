@@ -9,34 +9,73 @@ import com.mygdx.game.helper.BodyHelper;
 import com.mygdx.game.helper.ContactType;
 
 public class PlayerCar extends Car {
+    private float acceleration = 0.3f;
+    private int upperLimit = playScreen.getGame().getScreenHeight() / 4;
+    private int lowerLimit = 40;
+    private float inGameVelocity = 0;
+    private static final float maxInGameVelocity = 1.5f;
+
     public PlayerCar(float x, float y, PlayScreen playScreen) {
         super(x, y, playScreen);
-        this.body = BodyHelper.createBody(x, y, width, height, false, 100, playScreen.getWorld(), ContactType.PLAYER);
         this.texture = new Texture("white.png");
+        this.userData = new ObjectUserData(ContactType.PLAYER);
+        this.body = BodyHelper.createBody(x, y, width, height, false, 100, playScreen.getWorld(), userData);
     }
 
     @Override
-    public void update() {
-        super.update();
-        velY = 0;
+    public void update(float delta) {
+        super.update(delta);
         velX = 0;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.W))
-            velY = 1;
-        if (Gdx.input.isKeyPressed(Input.Keys.S))
-            velY = -1;
+        // controls
+        if (Gdx.input.isKeyPressed(Input.Keys.W)){
+            velY += acceleration * getUpdateCount(delta);
+            inGameVelocity = (float) Math.pow((0.1f + 1.1f * inGameVelocity), getUpdateCount(delta));
+        } else {
+            velY -= 0.8f * getUpdateCount(delta);
+            inGameVelocity *= Math.pow(0.9, getUpdateCount(delta));
+        }
+
         if (Gdx.input.isKeyPressed(Input.Keys.A))
             velX = -1;
         if (Gdx.input.isKeyPressed(Input.Keys.D))
             velX = 1;
 
-        if (y <= 100 && velY <= 0) // lower bound of car position
-            velY = 0;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+            shootBullet();
+        }
 
+        // upper limit on in game velocity
+        if (inGameVelocity > maxInGameVelocity)
+            inGameVelocity = maxInGameVelocity;
+
+        // upper limits on speed
+        if (velY > 1)
+            velY = 1;
+
+        if (velY < -1)
+            velY = -1;
+
+        // slowdown of car when approaching either limit
+        float range = upperLimit - lowerLimit;
+        float distanceUpper = upperLimit - y;
+        float distanceLower = y - lowerLimit;
+
+        if (distanceLower < range / 3 && velY <= 0)
+            velY -= velY * (distanceUpper)/range;
+        else if (distanceUpper < range / 2)
+            velY -= velY * (distanceLower)/range;
+
+        // lower bound of position
+        if (y <= lowerLimit && velY <= 0) velY = 0;
         body.setLinearVelocity(velX * speedX, velY * speedY);
     }
 
-    public void render(SpriteBatch batch) {
-        batch.draw(texture, x, y, width, height);
+    public void shootBullet(){
+        playScreen.getBulletList().add(new Bullet(x + width/2, y + height + Bullet.height, playScreen));
+    }
+
+    public float getInGameVelocity() {
+        return inGameVelocity;
     }
 }
