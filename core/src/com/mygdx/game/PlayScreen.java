@@ -8,12 +8,11 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.background.Road;
 import com.mygdx.game.helper.Const;
 import com.mygdx.game.objects.Bullet;
 import com.mygdx.game.objects.EnemyCar;
 import com.mygdx.game.objects.PlayerCar;
-
-import java.util.ArrayList;
 
 public class PlayScreen extends ScreenAdapter {
     Boot game;
@@ -26,6 +25,7 @@ public class PlayScreen extends ScreenAdapter {
     PlayerCar playerCar;
     Array<EnemyCar> enemyCarList;
     Array<Bullet> bulletList;
+    Array<Road> roads;
 
     public PlayScreen(Boot game){
         this.game = game;
@@ -36,12 +36,15 @@ public class PlayScreen extends ScreenAdapter {
         this.gameContactListener = new GameContactListener(this);
         this.world.setContactListener(this.gameContactListener);
 
-        this.playerCar = new PlayerCar(game.getScreenWidth()/2, 100, this);
+        this.playerCar = new PlayerCar((float) game.getScreenWidth()/2, 100, this);
         this.enemyCarList = new Array<>();
-        this.enemyCarList.add(new EnemyCar(game.getScreenWidth()/2, game.getScreenHeight() - 100, this));
+        this.enemyCarList.add(new EnemyCar((float) game.getScreenWidth()/2, game.getScreenHeight() - 100, this));
 
         this.bulletList = new Array<>();
-        this.bulletList.add(new Bullet(game.getScreenWidth()/2, game.getScreenHeight()/2, this));
+
+        // setup background
+        this.roads = new Array<>();
+        createRoads(5);
 
         this.box2DDebugRenderer = new Box2DDebugRenderer();
         camera.setToOrtho(false, game.getScreenWidth(), game.getScreenHeight());
@@ -54,6 +57,7 @@ public class PlayScreen extends ScreenAdapter {
         playerCar.update(delta);
         for (EnemyCar enemyCar : enemyCarList) { enemyCar.update(delta); }
         for (Bullet bullet: bulletList) { bullet.update(delta); }
+        for (Road road: roads) { road.update(delta); }
         batch.setProjectionMatrix(camera.combined);
     }
 
@@ -63,11 +67,42 @@ public class PlayScreen extends ScreenAdapter {
 
         batch.begin();
         playerCar.render(batch);
+        for (Road road: roads) { road.render(batch); }
         for (EnemyCar enemyCar : enemyCarList) { enemyCar.render(batch); }
         for (Bullet bullet : bulletList){ bullet.render(batch); }
         batch.end();
 
         this.box2DDebugRenderer.render(world, camera.combined.scl(Const.PPM));
+    }
+
+    public void createRoads(int n) {
+        Road middleRoad = new Road((float) game.getScreenWidth()/2, this);
+        roads.add(middleRoad);
+
+        int textureWidth = Road.getTexture(0).getWidth();
+        int roadCount = 1;
+
+        float leftRoadx = (float) game.getScreenWidth()/2 - textureWidth;
+        float rightRoadx = (float) game.getScreenWidth()/2 + textureWidth;
+
+        while (roadCount < n - 2) {
+            roadCount += 2;
+
+            roads.add(new Road(leftRoadx, this));
+            roads.add(new Road(rightRoadx, this));
+
+            leftRoadx -= textureWidth;
+            rightRoadx += textureWidth;
+        }
+
+        leftRoadx -= (Road.getTexture(-1).getWidth() - textureWidth)/2;
+        rightRoadx += (Road.getTexture(-1).getWidth() - textureWidth)/2;
+
+        Road leftMostRoad = new Road(leftRoadx, this, -1);
+        Road rightMostRoad = new Road(rightRoadx, this, 1);
+        roads.add(leftMostRoad);
+        roads.add(rightMostRoad);
+
     }
 
     public World getWorld() {

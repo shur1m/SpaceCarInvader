@@ -9,9 +9,9 @@ import com.mygdx.game.helper.BodyHelper;
 import com.mygdx.game.helper.ContactType;
 
 public class PlayerCar extends Car {
-    private float acceleration = 0.3f;
-    private int upperLimit = playScreen.getGame().getScreenHeight() / 4;
-    private int lowerLimit = 40;
+    private final float acceleration = 0.3f;
+    private final int upperLimit = playScreen.getGame().getScreenHeight() / 4;
+    private final int lowerLimit = 40;
     private float inGameVelocity = 0;
     private static final float maxInGameVelocity = 1.5f;
 
@@ -32,8 +32,8 @@ public class PlayerCar extends Car {
             velY += acceleration * getUpdateCount(delta);
             inGameVelocity = (float) Math.pow((0.1f + 1.1f * inGameVelocity), getUpdateCount(delta));
         } else {
-            velY -= 0.8f * getUpdateCount(delta);
-            inGameVelocity *= Math.pow(0.9, getUpdateCount(delta));
+            velY -= 0.01f * getUpdateCount(delta);
+            inGameVelocity *= (float) Math.pow(0.9, getUpdateCount(delta));
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.A))
@@ -61,9 +61,9 @@ public class PlayerCar extends Car {
         float distanceUpper = upperLimit - y;
         float distanceLower = y - lowerLimit;
 
-        if (distanceLower < range / 3 && velY <= 0)
-            velY -= velY * (distanceUpper)/range;
-        else if (distanceUpper < range / 2)
+        if (distanceLower < range / 3 && velY < 0)
+            velY -= velY * (distanceUpper)/range * 0.2f;
+        else if (distanceUpper < range / 2 && velY > 0)
             velY -= velY * (distanceLower)/range;
 
         // lower bound of position
