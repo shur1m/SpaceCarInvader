@@ -10,10 +10,11 @@ import com.mygdx.game.helper.ContactType;
 
 public abstract class Car {
     protected Body body;
-    protected float x, y, speedY, speedX, velY, velX;
-    protected int width, height, score;
+    protected float x, y, speedY, speedX, velY, velX, updatePerSecond;
+    protected int width, height;
     protected Texture texture;
     protected PlayScreen playScreen;
+    protected ObjectUserData userData;
 
     Car(float x, float y, PlayScreen playScreen){
         this.x = x;
@@ -22,16 +23,19 @@ public abstract class Car {
 
         this.width = 32;
         this.height = 64;
-        this.speedY = 5;
-        this.speedX = 4;
+        this.speedY = 12;
+        this.speedX = 8;
+        this.updatePerSecond = 75;
     }
 
-    public void update() {
+    public void update(float delta) {
         x = body.getPosition().x * Const.PPM - (width/2);
         y = body.getPosition().y * Const.PPM - (height/2);
-
-        this.body.setLinearVelocity(velX * speedX, velY * speedY);
     }
 
     public void render(SpriteBatch batch) { batch.draw(texture, x, y, width, height); }
+
+    public float getUpdateCount(float delta) {
+        return delta * updatePerSecond;
+    }
 }
