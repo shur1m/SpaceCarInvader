@@ -33,7 +33,11 @@ public class GameContactListener implements ContactListener {
             Car.CarUserData enemy = (Car.CarUserData) (userDataA.getType() == ContactType.ENEMY ? userDataA: userDataB);
 
             bullet.setToDelete(true);
-            enemy.setHealth(enemy.getHealth() - 1);
+            int reducedHealth = enemy.getHealth() - 1;
+            if (reducedHealth == 0){
+                playScreen.getScoreKeeper().updateScore(300);
+            }
+            enemy.setHealth(reducedHealth);
         }
 
         if (userDataA.getType() == ContactType.PLAYER && userDataB.getType() == ContactType.ENEMY ||

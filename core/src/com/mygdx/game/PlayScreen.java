@@ -1,8 +1,12 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -10,6 +14,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.background.Road;
 import com.mygdx.game.helper.Const;
+import com.mygdx.game.helper.ScoreKeeper;
 import com.mygdx.game.objects.Bullet;
 import com.mygdx.game.objects.EnemyCar;
 import com.mygdx.game.objects.PlayerCar;
@@ -29,6 +34,7 @@ public class PlayScreen extends ScreenAdapter {
     Array<Bullet> bulletList;
     Array<Road> roads;
     int roadCount;
+    ScoreKeeper scoreKeeper;
 
     public PlayScreen(Boot game){
         this.game = game;
@@ -39,7 +45,7 @@ public class PlayScreen extends ScreenAdapter {
         this.gameContactListener = new GameContactListener(this);
         this.world.setContactListener(this.gameContactListener);
 
-        // setup background
+        // background setup
         this.roads = new Array<>();
         this.roadCount = 5;
         createRoads(roadCount);
@@ -47,6 +53,7 @@ public class PlayScreen extends ScreenAdapter {
         this.playerCar = new PlayerCar((float) game.getScreenWidth()/2, 100, this);
         this.enemyCarList = new Array<>();
         this.bulletList = new Array<>();
+        this.scoreKeeper = new ScoreKeeper(this);
 
         this.box2DDebugRenderer = new Box2DDebugRenderer();
         camera.setToOrtho(false, game.getScreenWidth(), game.getScreenHeight());
@@ -57,6 +64,7 @@ public class PlayScreen extends ScreenAdapter {
 
         camera.update();
         playerCar.update(delta);
+        scoreKeeper.update(delta);
 
         //add enemy cars when all are deallocated
         createEnemies(1, 5, 0.1f, 1f);
@@ -76,9 +84,19 @@ public class PlayScreen extends ScreenAdapter {
         for (EnemyCar enemyCar : enemyCarList) { enemyCar.render(batch); }
         for (Bullet bullet : bulletList){ bullet.render(batch); }
         playerCar.render(batch);
+        scoreKeeper.render(batch);
         batch.end();
 
         this.box2DDebugRenderer.render(world, camera.combined.scl(Const.PPM));
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        box2DDebugRenderer.dispose();
+        batch.dispose();
+        world.dispose();
+        scoreKeeper.dispose();
     }
 
     private void createRoads(int n) {
@@ -145,6 +163,10 @@ public class PlayScreen extends ScreenAdapter {
 
     public Boot getGame() {
         return game;
+    }
+
+    public ScoreKeeper getScoreKeeper() {
+        return scoreKeeper;
     }
 
     public PlayerCar getPlayerCar() {
