@@ -9,6 +9,10 @@ import com.mygdx.game.helper.Const;
 import com.mygdx.game.helper.ContactType;
 
 public abstract class Car {
+
+    class CarUserData {
+
+    }
     protected Body body;
     protected float x, y, speedY, speedX, velY, velX, updatePerSecond;
     protected int width, height;

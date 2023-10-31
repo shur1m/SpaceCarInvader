@@ -51,13 +51,18 @@ public class Bullet {
         body.setLinearVelocity(0, speedY);
 
         if (userData.toDelete || y > playScreen.getGame().getScreenHeight()) {
-            playScreen.getWorld().destroyBody(this.body);
-            playScreen.getBulletList().removeValue(this, true);
-            userData.setToDelete(true);
+            dispose();
         }
     }
 
     public void render(SpriteBatch batch) {
         batch.draw(texture, x, y, width, height);
+    }
+
+    public void dispose(){
+        playScreen.getWorld().destroyBody(this.body);
+        playScreen.getBulletList().removeValue(this, true);
+        userData.setToDelete(true);
+        texture.dispose();
     }
 }
