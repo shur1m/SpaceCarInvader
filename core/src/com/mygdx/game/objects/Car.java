@@ -3,22 +3,34 @@ package com.mygdx.game.objects;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Contact;
 import com.mygdx.game.PlayScreen;
 import com.mygdx.game.helper.BodyHelper;
 import com.mygdx.game.helper.Const;
 import com.mygdx.game.helper.ContactType;
 
 public abstract class Car {
+    public class CarUserData extends ObjectUserData {
+        int health;
+        CarUserData(ContactType contactType, int startingHealth) {
+            super(contactType);
+            this.health = startingHealth;
+        }
 
-    class CarUserData {
+        public int getHealth(){
+            return health;
+        }
 
+        public void setHealth(int health) {
+            this.health = health;
+        }
     }
     protected Body body;
     protected float x, y, speedY, speedX, velY, velX, updatePerSecond;
     protected int width, height;
     protected Texture texture;
     protected PlayScreen playScreen;
-    protected ObjectUserData userData;
+    protected CarUserData userData;
 
     Car(float x, float y, PlayScreen playScreen){
         this.x = x;

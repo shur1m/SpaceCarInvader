@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 public class Boot extends Game {
 	public static Boot INSTANCE;
 	private int screenWidth, screenHeight;
-	private OrthographicCamera orthographicCamera;
+	private MainMenuScreen mainMenuScreen;
 	FreeTypeFontGenerator fontGenerator;
 
 	public Boot() {
@@ -24,7 +24,8 @@ public class Boot extends Game {
 		this.screenHeight = Gdx.graphics.getHeight();
 		this.fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("retro_gaming.ttf"));
 
-		setScreen(new MainMenuScreen(this));
+		this.mainMenuScreen = new MainMenuScreen(this);
+		setScreen(mainMenuScreen);
 	}
 
 	private void update() {
@@ -44,6 +45,10 @@ public class Boot extends Game {
 
 	public int getScreenHeight() {
 		return screenHeight;
+	}
+
+	public void setToMainMenu() {
+		setScreen(mainMenuScreen);
 	}
 
 	public FreeTypeFontGenerator getFontGenerator() {
