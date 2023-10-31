@@ -7,18 +7,39 @@ import com.mygdx.game.helper.BodyHelper;
 import com.mygdx.game.helper.ContactType;
 
 public class EnemyCar extends Car {
+    private float descentSpeed;
+
     public EnemyCar(float x, float y, PlayScreen playScreen) {
+        this(x, y, 0.2f, playScreen);
+    }
+
+    public EnemyCar(float x, float y, float descentSpeed, PlayScreen playScreen) {
         super(x, y, playScreen);
         this.texture = new Texture("red.png");
         this.userData = new ObjectUserData(ContactType.ENEMY);
         this.body = BodyHelper.createBody(x, y, width, height, false, 100, playScreen.getWorld(), userData);
+        this.descentSpeed = descentSpeed;
     }
 
     @Override
     public void update(float delta) {
         super.update(delta);
 
-        velY = -playScreen.getPlayerCar().getInGameVelocity();
+        velY = -playScreen.getPlayerCar().getInGameVelocity() - descentSpeed;
         body.setLinearVelocity(velX * speedX, velY * speedY);
+
+        if (y < -300) {
+            dispose();
+        }
+    }
+
+    public void dispose() {
+        playScreen.getWorld().destroyBody(body);
+        playScreen.getEnemyCarList().removeValue(this, true);
+        texture.dispose();
+    }
+
+    public Texture getTexture() {
+        return this.texture;
     }
 }

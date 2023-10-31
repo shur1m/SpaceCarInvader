@@ -14,6 +14,8 @@ import com.mygdx.game.objects.Bullet;
 import com.mygdx.game.objects.EnemyCar;
 import com.mygdx.game.objects.PlayerCar;
 
+import java.util.Arrays;
+
 public class PlayScreen extends ScreenAdapter {
     Boot game;
     OrthographicCamera camera;
@@ -26,6 +28,7 @@ public class PlayScreen extends ScreenAdapter {
     Array<EnemyCar> enemyCarList;
     Array<Bullet> bulletList;
     Array<Road> roads;
+    int roadCount;
 
     public PlayScreen(Boot game){
         this.game = game;
@@ -36,15 +39,14 @@ public class PlayScreen extends ScreenAdapter {
         this.gameContactListener = new GameContactListener(this);
         this.world.setContactListener(this.gameContactListener);
 
-        this.playerCar = new PlayerCar((float) game.getScreenWidth()/2, 100, this);
-        this.enemyCarList = new Array<>();
-        this.enemyCarList.add(new EnemyCar((float) game.getScreenWidth()/2, game.getScreenHeight() - 100, this));
-
-        this.bulletList = new Array<>();
-
         // setup background
         this.roads = new Array<>();
-        createRoads(5);
+        this.roadCount = 5;
+        createRoads(roadCount);
+
+        this.playerCar = new PlayerCar((float) game.getScreenWidth()/2, 100, this);
+        this.enemyCarList = new Array<>();
+        this.bulletList = new Array<>();
 
         this.box2DDebugRenderer = new Box2DDebugRenderer();
         camera.setToOrtho(false, game.getScreenWidth(), game.getScreenHeight());
@@ -55,6 +57,10 @@ public class PlayScreen extends ScreenAdapter {
 
         camera.update();
         playerCar.update(delta);
+
+        //add enemy cars when all are deallocated
+        createEnemies(1, 5, 0.1f, 1f);
+
         for (EnemyCar enemyCar : enemyCarList) { enemyCar.update(delta); }
         for (Bullet bullet: bulletList) { bullet.update(delta); }
         for (Road road: roads) { road.update(delta); }
@@ -66,16 +72,16 @@ public class PlayScreen extends ScreenAdapter {
         ScreenUtils.clear(0.31f, 0.396f, 0.78f,1);
 
         batch.begin();
-        playerCar.render(batch);
         for (Road road: roads) { road.render(batch); }
         for (EnemyCar enemyCar : enemyCarList) { enemyCar.render(batch); }
         for (Bullet bullet : bulletList){ bullet.render(batch); }
+        playerCar.render(batch);
         batch.end();
 
         this.box2DDebugRenderer.render(world, camera.combined.scl(Const.PPM));
     }
 
-    public void createRoads(int n) {
+    private void createRoads(int n) {
         Road middleRoad = new Road((float) game.getScreenWidth()/2, this);
         roads.add(middleRoad);
 
@@ -105,6 +111,34 @@ public class PlayScreen extends ScreenAdapter {
 
     }
 
+    private void createEnemies(int minCars, int maxCars, float minDescent, float maxDescent){
+        int roadWidth = Road.getTexture(0).getWidth();
+        float leftMostRoadx = (float) game.getScreenWidth()/2 - (roadCount/2) * roadWidth;
+
+        int carCount = minCars + (int)(Math.random() * (maxCars - minCars + 1));
+        int[] carPerRoad = new int[5];
+        float[] roadMaxSpeed = new float[5];
+        Arrays.fill(roadMaxSpeed, maxDescent);
+
+        if (enemyCarList.size == 0){
+            for (int i = 0; i < carCount; i++) {
+
+                // place enemy on random road
+                int roadIndex = (int) Math.floor(Math.random() * 5);
+                float carX = leftMostRoadx + roadIndex * roadWidth;
+                float carY = 100 + game.getScreenHeight() + carPerRoad[roadIndex] * 120;
+
+                carPerRoad[roadIndex]++;
+                float descentSpeed = Math.min(roadMaxSpeed[roadIndex], minDescent + (float) Math.random() * (maxDescent - minDescent));
+                roadMaxSpeed[roadIndex] = Math.min(roadMaxSpeed[roadIndex], descentSpeed);
+
+                enemyCarList.add(new EnemyCar(carX, carY, descentSpeed, this));
+            }
+        }
+
+
+    }
+
     public World getWorld() {
         return world;
     }
@@ -115,6 +149,10 @@ public class PlayScreen extends ScreenAdapter {
 
     public PlayerCar getPlayerCar() {
         return playerCar;
+    }
+
+    public Array<EnemyCar> getEnemyCarList() {
+        return enemyCarList;
     }
 
     public Array<Bullet> getBulletList() {

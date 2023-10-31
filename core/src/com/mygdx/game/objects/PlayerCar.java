@@ -12,7 +12,7 @@ public class PlayerCar extends Car {
     private final float acceleration = 0.3f;
     private final int upperLimit = playScreen.getGame().getScreenHeight() / 4;
     private final int lowerLimit = 40;
-    private float inGameVelocity = 0;
+    private float inGameVelocity = 10;
     private static final float maxInGameVelocity = 1.5f;
 
     public PlayerCar(float x, float y, PlayScreen playScreen) {
