@@ -1,7 +1,6 @@
 package com.mygdx.game.objects;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.PlayScreen;
 import com.mygdx.game.helper.BodyHelper;
 import com.mygdx.game.helper.ContactType;
@@ -28,7 +27,7 @@ public class EnemyCar extends Car {
         velY = -playScreen.getPlayerCar().getInGameVelocity() - descentSpeed;
         body.setLinearVelocity(velX * speedX, velY * speedY);
 
-        if (y < -300 || userData.getHealth() <= 0) {
+        if (y < -300 || userData.getCurrentHealth() <= 0) {
             dispose();
         }
     }

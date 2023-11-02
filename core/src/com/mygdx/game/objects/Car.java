@@ -3,28 +3,31 @@ package com.mygdx.game.objects;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.Contact;
 import com.mygdx.game.PlayScreen;
-import com.mygdx.game.helper.BodyHelper;
 import com.mygdx.game.helper.Const;
 import com.mygdx.game.helper.ContactType;
 
 public abstract class Car {
-    public class CarUserData extends ObjectUserData {
-        int health;
-        CarUserData(ContactType contactType, int startingHealth) {
+    public static class CarUserData extends ObjectUserData {
+        final int fullHealth;
+        int currentHealth;
+        CarUserData(ContactType contactType, int fullHealth) {
             super(contactType);
-            this.health = startingHealth;
+            this.currentHealth = fullHealth;
+            this.fullHealth = fullHealth;
         }
 
-        public int getHealth(){
-            return health;
+        public int getCurrentHealth(){
+            return currentHealth;
         }
 
-        public void setHealth(int health) {
-            this.health = health;
+        public void setCurrentHealth(int currentHealth) {
+            this.currentHealth = currentHealth;
         }
+
+        public int getFullHealth() { return this.fullHealth; }
     }
+
     protected Body body;
     protected float x, y, speedY, speedX, velY, velX, updatePerSecond;
     protected int width, height;
@@ -45,13 +48,17 @@ public abstract class Car {
     }
 
     public void update(float delta) {
-        x = body.getPosition().x * Const.PPM - (width/2);
-        y = body.getPosition().y * Const.PPM - (height/2);
+        x = body.getPosition().x * Const.PPM - (width /2);
+        y = body.getPosition().y * Const.PPM - (height /2);
     }
 
     public void render(SpriteBatch batch) { batch.draw(texture, x, y, width, height); }
 
     public float getUpdateCount(float delta) {
         return delta * updatePerSecond;
+    }
+
+    public CarUserData getUserData() {
+        return userData;
     }
 }

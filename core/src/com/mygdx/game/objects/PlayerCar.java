@@ -3,7 +3,6 @@ package com.mygdx.game.objects;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
-import com.mygdx.game.MainMenuScreen;
 import com.mygdx.game.PlayScreen;
 import com.mygdx.game.helper.BodyHelper;
 import com.mygdx.game.helper.ContactType;
@@ -12,7 +11,7 @@ public class PlayerCar extends Car {
     private final float acceleration = 0.3f;
     private final int upperLimit = playScreen.getGame().getScreenHeight() / 4;
     private final int lowerLimit = 40;
-    private float inGameVelocity = 10;
+    private float inGameVelocity = 0;
     private static final float maxInGameVelocity = 1.5f;
 
     public PlayerCar(float x, float y, PlayScreen playScreen) {
@@ -27,7 +26,7 @@ public class PlayerCar extends Car {
         super.update(delta);
 
         // gameover
-        if (userData.getHealth() <= 0)
+        if (userData.getCurrentHealth() <= 0)
             playScreen.getGame().setToMainMenu();
 
         // controls
