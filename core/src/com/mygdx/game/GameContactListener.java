@@ -4,7 +4,6 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.helper.ContactType;
 import com.mygdx.game.objects.Bullet;
 import com.mygdx.game.objects.Car;
-import com.mygdx.game.objects.EnemyCar;
 import com.mygdx.game.objects.ObjectUserData;
 
 public class GameContactListener implements ContactListener {
@@ -33,11 +32,11 @@ public class GameContactListener implements ContactListener {
             Car.CarUserData enemy = (Car.CarUserData) (userDataA.getType() == ContactType.ENEMY ? userDataA: userDataB);
 
             bullet.setToDelete(true);
-            int reducedHealth = enemy.getHealth() - 1;
+            int reducedHealth = enemy.getCurrentHealth() - 1;
             if (reducedHealth == 0){
                 playScreen.getScoreKeeper().updateScore(300);
             }
-            enemy.setHealth(reducedHealth);
+            enemy.setCurrentHealth(reducedHealth);
         }
 
         if (userDataA.getType() == ContactType.PLAYER && userDataB.getType() == ContactType.ENEMY ||
@@ -46,8 +45,8 @@ public class GameContactListener implements ContactListener {
             Car.CarUserData enemy = (Car.CarUserData) (userDataA.getType() == ContactType.ENEMY ? userDataA : userDataB);
             Car.CarUserData player = (Car.CarUserData) (userDataA.getType() == ContactType.PLAYER ? userDataA : userDataB);
 
-            enemy.setHealth(0);
-            player.setHealth(player.getHealth()-1);
+            enemy.setCurrentHealth(0);
+            player.setCurrentHealth(player.getCurrentHealth()-1);
         }
     }
 

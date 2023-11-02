@@ -9,19 +9,23 @@ import com.mygdx.game.helper.ContactType;
 
 public abstract class Car {
     public static class CarUserData extends ObjectUserData {
-        int health;
-        CarUserData(ContactType contactType, int startingHealth) {
+        final int fullHealth;
+        int currentHealth;
+        CarUserData(ContactType contactType, int fullHealth) {
             super(contactType);
-            this.health = startingHealth;
+            this.currentHealth = fullHealth;
+            this.fullHealth = fullHealth;
         }
 
-        public int getHealth(){
-            return health;
+        public int getCurrentHealth(){
+            return currentHealth;
         }
 
-        public void setHealth(int health) {
-            this.health = health;
+        public void setCurrentHealth(int currentHealth) {
+            this.currentHealth = currentHealth;
         }
+
+        public int getFullHealth() { return this.fullHealth; }
     }
 
     protected Body body;

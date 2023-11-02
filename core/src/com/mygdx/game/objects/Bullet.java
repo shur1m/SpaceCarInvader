@@ -29,7 +29,7 @@ public class Bullet {
     private Body body;
     private float x, y, speedY;
     public static final int width = 6, height = 20;
-    private Texture texture;
+    private Texture texture = new Texture("white.png");
     private PlayScreen playScreen;
     private BulletUserData userData;
 
@@ -41,7 +41,6 @@ public class Bullet {
 
         this.userData = new BulletUserData();
         this.body = BodyHelper.createBody(x, y, width, height, false, 0, playScreen.getWorld(), userData);
-        this.texture = new Texture("white.png");
     }
 
     public void update(float delta) {
@@ -63,6 +62,5 @@ public class Bullet {
         playScreen.getWorld().destroyBody(this.body);
         playScreen.getBulletList().removeValue(this, true);
         userData.setToDelete(true);
-        texture.dispose();
     }
 }

@@ -3,7 +3,6 @@ package com.mygdx.game.objects;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
-import com.mygdx.game.MainMenuScreen;
 import com.mygdx.game.PlayScreen;
 import com.mygdx.game.helper.BodyHelper;
 import com.mygdx.game.helper.ContactType;
@@ -27,7 +26,7 @@ public class PlayerCar extends Car {
         super.update(delta);
 
         // gameover
-        if (userData.getHealth() <= 0)
+        if (userData.getCurrentHealth() <= 0)
             playScreen.getGame().setToMainMenu();
 
         // controls

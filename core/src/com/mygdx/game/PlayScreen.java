@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.background.Background;
 import com.mygdx.game.background.Road;
 import com.mygdx.game.helper.Const;
 import com.mygdx.game.helper.ScoreKeeper;
@@ -32,9 +33,8 @@ public class PlayScreen extends ScreenAdapter {
     PlayerCar playerCar;
     Array<EnemyCar> enemyCarList;
     Array<Bullet> bulletList;
-    Array<Road> roads;
-    int roadCount;
     ScoreKeeper scoreKeeper;
+    Background background;
 
     public PlayScreen(Boot game){
         this.game = game;
@@ -46,9 +46,7 @@ public class PlayScreen extends ScreenAdapter {
         this.world.setContactListener(this.gameContactListener);
 
         // background setup
-        this.roads = new Array<>();
-        this.roadCount = 5;
-        createRoads(roadCount);
+        this.background = new Background(5, this);
 
         this.playerCar = new PlayerCar((float) game.getScreenWidth()/2, 100, this);
         this.enemyCarList = new Array<>();
@@ -71,16 +69,16 @@ public class PlayScreen extends ScreenAdapter {
 
         for (EnemyCar enemyCar : enemyCarList) { enemyCar.update(delta); }
         for (Bullet bullet: bulletList) { bullet.update(delta); }
-        for (Road road: roads) { road.update(delta); }
+        background.update(delta);
         batch.setProjectionMatrix(camera.combined);
     }
 
     public void render(float delta){
         update(delta);
-        ScreenUtils.clear(0.31f, 0.396f, 0.78f,1);
+        ScreenUtils.clear(0f, 0f, 0f,1);
 
         batch.begin();
-        for (Road road: roads) { road.render(batch); }
+        background.render(batch);
         for (EnemyCar enemyCar : enemyCarList) { enemyCar.render(batch); }
         for (Bullet bullet : bulletList){ bullet.render(batch); }
         playerCar.render(batch);
@@ -99,39 +97,9 @@ public class PlayScreen extends ScreenAdapter {
         scoreKeeper.dispose();
     }
 
-    private void createRoads(int n) {
-        Road middleRoad = new Road((float) game.getScreenWidth()/2, this);
-        roads.add(middleRoad);
-
-        int textureWidth = Road.getTexture(0).getWidth();
-        int roadCount = 1;
-
-        float leftRoadx = (float) game.getScreenWidth()/2 - textureWidth;
-        float rightRoadx = (float) game.getScreenWidth()/2 + textureWidth;
-
-        while (roadCount < n - 2) {
-            roadCount += 2;
-
-            roads.add(new Road(leftRoadx, this));
-            roads.add(new Road(rightRoadx, this));
-
-            leftRoadx -= textureWidth;
-            rightRoadx += textureWidth;
-        }
-
-        leftRoadx -= (Road.getTexture(-1).getWidth() - textureWidth)/2;
-        rightRoadx += (Road.getTexture(-1).getWidth() - textureWidth)/2;
-
-        Road leftMostRoad = new Road(leftRoadx, this, -1);
-        Road rightMostRoad = new Road(rightRoadx, this, 1);
-        roads.add(leftMostRoad);
-        roads.add(rightMostRoad);
-
-    }
-
     private void createEnemies(int minCars, int maxCars, float minDescent, float maxDescent){
         int roadWidth = Road.getTexture(0).getWidth();
-        float leftMostRoadx = (float) game.getScreenWidth()/2 - (roadCount/2) * roadWidth;
+        float leftMostRoadx = (float) game.getScreenWidth()/2 - (background.getRoadCount()/2) * roadWidth;
 
         int carCount = minCars + (int)(Math.random() * (maxCars - minCars + 1));
         int[] carPerRoad = new int[5];
