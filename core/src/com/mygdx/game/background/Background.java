@@ -53,13 +53,15 @@ public class Background {
             rightRoadx += textureWidth;
         }
 
-        leftRoadx -= (Road.getTexture(-1).getWidth() - textureWidth)/2;
-        rightRoadx += (Road.getTexture(-1).getWidth() - textureWidth)/2;
+        leftRoadx -= (float)(Road.getTexture(-1).getWidth() - textureWidth)/2;
+        rightRoadx += (float)(Road.getTexture(1).getWidth() - textureWidth)/2;
+        roads.add(new Road(leftRoadx, playScreen, -1));
+        roads.add(new Road(rightRoadx, playScreen, 1));
 
-        Road leftMostRoad = new Road(leftRoadx, playScreen, -1);
-        Road rightMostRoad = new Road(rightRoadx, playScreen, 1);
-        roads.add(leftMostRoad);
-        roads.add(rightMostRoad);
+        float leftWallx = leftRoadx - (float)(Road.getTexture(-1).getWidth() + Road.getTexture(-2).getWidth())/2;
+        float rightWallx = rightRoadx + (float)(Road.getTexture(-1).getWidth() + Road.getTexture(-2).getWidth())/2;
+        roads.add(new Wall(leftWallx, playScreen, true));
+        roads.add(new Wall(rightWallx, playScreen, false));
     }
 
     private void renderHearts(SpriteBatch batch){
@@ -87,6 +89,6 @@ public class Background {
     }
 
     public int getRoadCount() {
-        return this.roads.size;
+        return this.roads.size - 2;
     }
 }

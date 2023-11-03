@@ -6,16 +6,18 @@ import com.mygdx.game.PlayScreen;
 import com.mygdx.game.helper.Const;
 
 public class Road {
-    private static final Texture[] textures = {
+    protected static final Texture[] textures = {
+            new Texture("leftWall.png"),
             new Texture("leftRoad.png"),
             new Texture("road.png"),
-            new Texture("rightRoad.png")
+            new Texture("rightRoad.png"),
+            new Texture("rightWall.png"),
     };
 
-    private final float x;
-    private float yShift;
-    private int position;
-    private final PlayScreen playScreen;
+    protected final float x;
+    protected float yShift;
+    protected int position;
+    protected final PlayScreen playScreen;
 
     public Road(float x, PlayScreen playScreen) {
         this(x, playScreen, 0);
@@ -32,11 +34,12 @@ public class Road {
     }
 
     public void render(SpriteBatch batch){
-        Texture textureUsed = textures[position+1];
-        batch.draw(textureUsed, x - (float) getTexture(position).getWidth()/2, (float) playScreen.getGame().getScreenHeight()/2 - yShift - (float) getTexture(position).getHeight()/2);
+        Texture textureUsed = getTexture(position);
+        batch.draw(textureUsed, x - (float) textureUsed.getWidth()/2, (float) playScreen.getGame().getScreenHeight()/2 - yShift - (float) textureUsed.getHeight()/2);
     }
 
     public static Texture getTexture(int position) {
-        return textures[position + 1];
+        int index = textures.length / 2 + position;
+        return textures[index];
     }
 }
