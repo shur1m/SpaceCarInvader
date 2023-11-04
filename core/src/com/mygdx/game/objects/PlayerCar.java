@@ -16,7 +16,10 @@ public class PlayerCar extends Car {
 
     public PlayerCar(float x, float y, PlayScreen playScreen) {
         super(x, y, playScreen);
-        this.texture = new Texture("white.png");
+        float ratio = 0.3f;
+        this.texture = new Texture("tank.png");
+        this.width = (int) (texture.getWidth() * ratio);
+        this.height = (int) (texture.getHeight() * ratio);
         this.userData = new CarUserData(ContactType.PLAYER, 3);
         this.body = BodyHelper.createBody(x, y, width, height, false, 100, playScreen.getWorld(), userData);
     }
@@ -27,7 +30,7 @@ public class PlayerCar extends Car {
 
         // gameover
         if (userData.getCurrentHealth() <= 0)
-            playScreen.getGame().setToMainMenu();
+            playScreen.getGame().setToGameOver();
 
         // controls
         if (Gdx.input.isKeyPressed(Input.Keys.W)){

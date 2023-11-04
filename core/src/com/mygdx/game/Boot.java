@@ -12,6 +12,7 @@ public class Boot extends Game {
 	public static Boot INSTANCE;
 	private int screenWidth, screenHeight;
 	private MainMenuScreen mainMenuScreen;
+	private GameOverScreen gameOverScreen;
 	FreeTypeFontGenerator fontGenerator;
 
 	public Boot() {
@@ -25,6 +26,7 @@ public class Boot extends Game {
 		this.fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("retro_gaming.ttf"));
     
 		this.mainMenuScreen = new MainMenuScreen(this);
+		this.gameOverScreen = new GameOverScreen(this);
 		setScreen(mainMenuScreen);
 	}
 
@@ -49,6 +51,10 @@ public class Boot extends Game {
 
 	public void setToMainMenu() {
 		setScreen(mainMenuScreen);
+	}
+
+	public void setToGameOver() {
+		setScreen(gameOverScreen);
 	}
 
 	public FreeTypeFontGenerator getFontGenerator() {

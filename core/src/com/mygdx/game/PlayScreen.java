@@ -85,7 +85,7 @@ public class PlayScreen extends ScreenAdapter {
         scoreKeeper.render(batch);
         batch.end();
 
-        this.box2DDebugRenderer.render(world, camera.combined.scl(Const.PPM));
+//        this.box2DDebugRenderer.render(world, camera.combined.scl(Const.PPM));
     }
 
     @Override
