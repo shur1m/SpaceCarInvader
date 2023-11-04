@@ -29,7 +29,7 @@ public class Bullet {
     private Body body;
     private float x, y, speedY;
     public static final int width = 6, height = 20;
-    private Texture texture = new Texture("white.png");
+    private Texture texture = new Texture("yellow.png");
     private PlayScreen playScreen;
     private BulletUserData userData;
 

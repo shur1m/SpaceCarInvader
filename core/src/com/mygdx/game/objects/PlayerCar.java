@@ -16,7 +16,7 @@ public class PlayerCar extends Car {
 
     public PlayerCar(float x, float y, PlayScreen playScreen) {
         super(x, y, playScreen);
-        float ratio = 0.3f;
+        float ratio = 0.35f;
         this.texture = new Texture("tank.png");
         this.width = (int) (texture.getWidth() * ratio);
         this.height = (int) (texture.getHeight() * ratio);
