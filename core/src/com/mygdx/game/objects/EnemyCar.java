@@ -6,6 +6,11 @@ import com.mygdx.game.helper.BodyHelper;
 import com.mygdx.game.helper.ContactType;
 
 public class EnemyCar extends Car {
+    private static Texture[] textures = {
+            new Texture("redCar.png"),
+            new Texture("greenCar.png"),
+            new Texture("blueCar.png"),
+    };
     private float descentSpeed;
 
     public EnemyCar(float x, float y, PlayScreen playScreen) {
@@ -14,7 +19,7 @@ public class EnemyCar extends Car {
 
     public EnemyCar(float x, float y, float descentSpeed, PlayScreen playScreen) {
         super(x, y, playScreen);
-        this.texture = new Texture("car.png");
+        this.texture = this.textures[(int)(Math.random() * 3)];
 
         float ratio = 0.075f;
         this.width = (int)(texture.getWidth() * ratio);
@@ -39,7 +44,6 @@ public class EnemyCar extends Car {
     public void dispose() {
         playScreen.getWorld().destroyBody(body);
         playScreen.getEnemyCarList().removeValue(this, true);
-        texture.dispose();
     }
 
     public Texture getTexture() {
