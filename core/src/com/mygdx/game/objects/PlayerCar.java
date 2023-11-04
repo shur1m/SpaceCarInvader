@@ -3,7 +3,6 @@ package com.mygdx.game.objects;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.PlayScreen;
 import com.mygdx.game.helper.BodyHelper;
 import com.mygdx.game.helper.ContactType;
@@ -18,14 +17,17 @@ public class PlayerCar extends Car {
     public PlayerCar(float x, float y, PlayScreen playScreen) {
         super(x, y, playScreen);
         this.texture = new Texture("white.png");
-        this.userData = new ObjectUserData(ContactType.PLAYER);
+        this.userData = new CarUserData(ContactType.PLAYER, 3);
         this.body = BodyHelper.createBody(x, y, width, height, false, 100, playScreen.getWorld(), userData);
     }
 
     @Override
     public void update(float delta) {
         super.update(delta);
-        velX = 0;
+
+        // gameover
+        if (userData.getCurrentHealth() <= 0)
+            playScreen.getGame().setToMainMenu();
 
         // controls
         if (Gdx.input.isKeyPressed(Input.Keys.W)){
@@ -36,11 +38,13 @@ public class PlayerCar extends Car {
             inGameVelocity *= (float) Math.pow(0.9, getUpdateCount(delta));
         }
 
+        velX = 0;
         if (Gdx.input.isKeyPressed(Input.Keys.A))
             velX = -1;
         if (Gdx.input.isKeyPressed(Input.Keys.D))
             velX = 1;
 
+        // shooting
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
             shootBullet();
         }

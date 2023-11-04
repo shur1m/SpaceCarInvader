@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.helper.ContactType;
 import com.mygdx.game.objects.Bullet;
+import com.mygdx.game.objects.Car;
 import com.mygdx.game.objects.ObjectUserData;
 
 public class GameContactListener implements ContactListener {
@@ -25,12 +26,27 @@ public class GameContactListener implements ContactListener {
         ObjectUserData userDataB = (ObjectUserData) b.getUserData();
 
         if (userDataA.getType() == ContactType.BULLET && userDataB.getType() == ContactType.ENEMY ||
-                userDataA.getType() == ContactType.ENEMY && userDataB.getType() == ContactType.BULLET ){
+            userDataA.getType() == ContactType.ENEMY && userDataB.getType() == ContactType.BULLET ){
 
-            Bullet.BulletUserData bullet = userDataA.getType() == ContactType.BULLET ? (Bullet.BulletUserData) userDataA : (Bullet.BulletUserData) userDataB;
-            ObjectUserData enemy = userDataA.getType() == ContactType.ENEMY ? userDataA: userDataB;
+            Bullet.BulletUserData bullet = (Bullet.BulletUserData) (userDataA.getType() == ContactType.BULLET ? userDataA : userDataB);
+            Car.CarUserData enemy = (Car.CarUserData) (userDataA.getType() == ContactType.ENEMY ? userDataA: userDataB);
 
             bullet.setToDelete(true);
+            int reducedHealth = enemy.getCurrentHealth() - 1;
+            if (reducedHealth == 0){
+                playScreen.getScoreKeeper().updateScore(300);
+            }
+            enemy.setCurrentHealth(reducedHealth);
+        }
+
+        if (userDataA.getType() == ContactType.PLAYER && userDataB.getType() == ContactType.ENEMY ||
+            userDataB.getType() == ContactType.ENEMY && userDataA.getType() == ContactType.PLAYER){
+
+            Car.CarUserData enemy = (Car.CarUserData) (userDataA.getType() == ContactType.ENEMY ? userDataA : userDataB);
+            Car.CarUserData player = (Car.CarUserData) (userDataA.getType() == ContactType.PLAYER ? userDataA : userDataB);
+
+            enemy.setCurrentHealth(0);
+            player.setCurrentHealth(player.getCurrentHealth()-1);
         }
     }
 
