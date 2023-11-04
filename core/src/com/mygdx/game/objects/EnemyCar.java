@@ -14,7 +14,11 @@ public class EnemyCar extends Car {
 
     public EnemyCar(float x, float y, float descentSpeed, PlayScreen playScreen) {
         super(x, y, playScreen);
-        this.texture = new Texture("red.png");
+        this.texture = new Texture("car.png");
+
+        float ratio = 0.075f;
+        this.width = (int)(texture.getWidth() * ratio);
+        this.height = (int)(texture.getHeight() * ratio);
         this.userData = new CarUserData(ContactType.ENEMY, 3);
         this.body = BodyHelper.createBody(x, y, width, height, false, 100, playScreen.getWorld(), userData);
         this.descentSpeed = descentSpeed;

@@ -57,7 +57,7 @@ public class GameOverScreen extends ScreenAdapter{
         if (Gdx.input.isKeyJustPressed(Input.Keys.R))
             game.setScreen(new PlayScreen(game));
         if (Gdx.input.isKeyJustPressed(Input.Keys.M))
-            game.setScreen(new MainMenuScreen(game));
+            game.setToMainMenu();
     }
 
     public void render(float delta){

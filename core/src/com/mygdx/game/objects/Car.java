@@ -40,8 +40,6 @@ public abstract class Car {
         this.y = y;
         this.playScreen = playScreen;
 
-        this.width = 32;
-        this.height = 64;
         this.speedY = 12;
         this.speedX = 8;
         this.updatePerSecond = 75;
