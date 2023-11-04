@@ -23,7 +23,7 @@ public class Boot extends Game {
 		this.screenWidth = Gdx.graphics.getWidth();
 		this.screenHeight = Gdx.graphics.getHeight();
 		this.fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("retro_gaming.ttf"));
-
+    
 		this.mainMenuScreen = new MainMenuScreen(this);
 		setScreen(mainMenuScreen);
 	}
