@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.game.helper.AudioManager;
 import com.mygdx.game.helper.ContactType;
 import com.mygdx.game.objects.Bullet;
 import com.mygdx.game.objects.Car;
@@ -35,6 +36,7 @@ public class GameContactListener implements ContactListener {
             int reducedHealth = enemy.getCurrentHealth() - 1;
             if (reducedHealth == 0){
                 playScreen.getScoreKeeper().updateScore(300);
+                AudioManager.playEnemyDied();
             }
             enemy.setCurrentHealth(reducedHealth);
         }
@@ -47,6 +49,7 @@ public class GameContactListener implements ContactListener {
 
             enemy.setCurrentHealth(0);
             player.setCurrentHealth(player.getCurrentHealth()-1);
+            AudioManager.playTakeDamage();
         }
     }
 

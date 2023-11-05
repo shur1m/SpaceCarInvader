@@ -3,10 +3,8 @@ package com.mygdx.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.helper.AudioManager;
 
 public class Boot extends Game {
 	public static Boot INSTANCE;
@@ -27,7 +25,7 @@ public class Boot extends Game {
     
 		this.mainMenuScreen = new MainMenuScreen(this);
 		this.gameOverScreen = new GameOverScreen(this);
-		setScreen(mainMenuScreen);
+		setToMainMenu();
 	}
 
 	private void update() {
@@ -50,11 +48,14 @@ public class Boot extends Game {
 	}
 
 	public void setToMainMenu() {
+		AudioManager.playMainMenu();
 		setScreen(mainMenuScreen);
+
 	}
 
 	public void setToGameOver() {
 		setScreen(gameOverScreen);
+		gameOverScreen.reset();
 	}
 
 	public FreeTypeFontGenerator getFontGenerator() {

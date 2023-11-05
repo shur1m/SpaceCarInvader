@@ -1,5 +1,7 @@
 package com.mygdx.game.helper;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -38,5 +40,21 @@ public class ScoreKeeper {
 
     public void updateScore(float change){
         score += change;
+    }
+
+    public void saveScore() {
+        Preferences scores = Gdx.app.getPreferences("scores");
+        String scoreString = scores.getString("scoreString", "");
+
+        if (!scoreString.isEmpty())
+            scoreString = scoreString + ",";
+
+        scores.putString("scoreString", scoreString + getScore());
+//            scores.putString("scoreString", ""); //clear scores
+        scores.flush();
+    }
+
+    public int getScore() {
+        return (int) score;
     }
 }

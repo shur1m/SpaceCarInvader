@@ -86,7 +86,7 @@ public class PlayScreen extends ScreenAdapter {
         batch.end();
 
 //        this.box2DDebugRenderer.render(world, camera.combined.scl(Const.PPM));
-    }
+}
 
     @Override
     public void dispose() {

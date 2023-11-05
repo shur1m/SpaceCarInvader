@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.PlayScreen;
+import com.mygdx.game.helper.AudioManager;
 import com.mygdx.game.helper.BodyHelper;
 import com.mygdx.game.helper.ContactType;
 
@@ -21,7 +22,7 @@ public class PlayerCar extends Car {
         this.width = (int) (texture.getWidth() * ratio);
         this.height = (int) (texture.getHeight() * ratio);
         this.userData = new CarUserData(ContactType.PLAYER, 3);
-        this.body = BodyHelper.createBody(x, y, width, height, false, 100, playScreen.getWorld(), userData);
+        this.body = BodyHelper.createBody(x, y, width-10, height-40, false, 100, playScreen.getWorld(), userData);
     }
 
     @Override
@@ -29,8 +30,11 @@ public class PlayerCar extends Car {
         super.update(delta);
 
         // gameover
-        if (userData.getCurrentHealth() <= 0)
+        if (userData.getCurrentHealth() <= 0){
+            playScreen.getScoreKeeper().saveScore();
             playScreen.getGame().setToGameOver();
+            AudioManager.playGameOver();
+        }
 
         // controls
         if (Gdx.input.isKeyPressed(Input.Keys.W)){
@@ -79,6 +83,7 @@ public class PlayerCar extends Car {
     }
 
     public void shootBullet(){
+        AudioManager.playShoot();
         playScreen.getBulletList().add(new Bullet(x + width/2, y + height + Bullet.height, playScreen));
     }
 

@@ -1,8 +1,12 @@
 package com.mygdx.game.background;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.PlayScreen;
 import com.mygdx.game.objects.Car;
@@ -12,6 +16,8 @@ public class Background {
     private PlayScreen playScreen;
     private TextureRegion filledHeart;
     private TextureRegion emptyHeart;
+    private BitmapFont controlsFont;
+    private String[] controlMessages = { "[W] speed up", "[A] move left", "[D] move right", "[SPACE] shoot"};
 
     public Background(int roadCount, PlayScreen playScreen){
         this.roads = new Array<>();
@@ -22,6 +28,11 @@ public class Background {
         TextureRegion[] heartSpriteSheet = TextureRegion.split(heartTexture, heartTexture.getWidth()/2, heartTexture.getHeight())[0];
         this.filledHeart = heartSpriteSheet[0];
         this.emptyHeart = heartSpriteSheet[1];
+
+        FreeTypeFontGenerator.FreeTypeFontParameter controlsFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        controlsFontParameter.color = Color.WHITE;
+        controlsFontParameter.size = 20;
+        this.controlsFont = playScreen.getGame().getFontGenerator().generateFont(controlsFontParameter);
     }
 
     public void update(float delta) {
@@ -31,6 +42,7 @@ public class Background {
     public void render(SpriteBatch batch) {
         for (Road road: roads) { road.render(batch); }
         renderHearts(batch);
+        renderControls(batch);
     }
 
     private void createRoads(int n) {
@@ -62,6 +74,14 @@ public class Background {
         float rightWallx = rightRoadx + (float)(Road.getTexture(-1).getWidth() + Road.getTexture(-2).getWidth())/2;
         roads.add(new Wall(leftWallx, playScreen, true));
         roads.add(new Wall(rightWallx, playScreen, false));
+    }
+
+    private void renderControls(SpriteBatch batch){
+        final float x = 25;
+        float y = 15;
+
+        for (int i = controlMessages.length - 1; i >= 0; --i)
+            controlsFont.draw(batch, controlMessages[i], x, y+=25);
     }
 
     private void renderHearts(SpriteBatch batch){
