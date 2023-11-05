@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.helper.AudioManager;
 
 public class MainMenuScreen extends ScreenAdapter {
     Boot game;
@@ -53,8 +54,10 @@ public class MainMenuScreen extends ScreenAdapter {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+            AudioManager.stopMainMenu();
             game.setScreen(new PlayScreen(game));
+        }
     }
 
     public void render(float delta){

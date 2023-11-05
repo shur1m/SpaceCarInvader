@@ -1,7 +1,10 @@
 package com.mygdx.game.objects;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.PlayScreen;
+import com.mygdx.game.helper.AudioManager;
 import com.mygdx.game.helper.BodyHelper;
 import com.mygdx.game.helper.ContactType;
 
@@ -11,11 +14,8 @@ public class EnemyCar extends Car {
             new Texture("greenCar.png"),
             new Texture("blueCar.png"),
     };
+    private TextureRegion[] healthSpriteSheet;
     private float descentSpeed;
-
-    public EnemyCar(float x, float y, PlayScreen playScreen) {
-        this(x, y, 0.2f, playScreen);
-    }
 
     public EnemyCar(float x, float y, float descentSpeed, PlayScreen playScreen) {
         super(x, y, playScreen);
@@ -27,6 +27,9 @@ public class EnemyCar extends Car {
         this.userData = new CarUserData(ContactType.ENEMY, 3);
         this.body = BodyHelper.createBody(x, y, width, height, false, 100, playScreen.getWorld(), userData);
         this.descentSpeed = descentSpeed;
+
+        Texture healthBarTexture = new Texture("healthbar.png");
+        this.healthSpriteSheet = TextureRegion.split(healthBarTexture, healthBarTexture.getWidth()/3, healthBarTexture.getHeight())[0];
     }
 
     @Override
@@ -38,6 +41,16 @@ public class EnemyCar extends Car {
 
         if (y < -300 || userData.getCurrentHealth() <= 0) {
             dispose();
+        }
+    }
+
+    @Override
+    public void render(SpriteBatch batch) {
+        super.render(batch);
+        if (userData.getCurrentHealth() < userData.getFullHealth()){
+            int healthDifference = userData.getFullHealth() - userData.getCurrentHealth();
+            batch.draw(healthSpriteSheet[healthDifference],
+                    x + (float) width/2 - (float) healthSpriteSheet[healthDifference].getRegionWidth()/2, y + height + 15);
         }
     }
 
