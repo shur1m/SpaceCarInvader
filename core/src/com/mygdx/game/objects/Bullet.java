@@ -11,7 +11,7 @@ import com.mygdx.game.helper.ContactType;
 public class Bullet {
 
     public class BulletUserData extends ObjectUserData {
-        boolean toDelete;
+        private boolean toDelete;
         BulletUserData(){
             super(ContactType.BULLET);
             this.toDelete = false;

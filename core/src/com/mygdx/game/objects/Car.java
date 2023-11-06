@@ -9,8 +9,8 @@ import com.mygdx.game.helper.ContactType;
 
 public abstract class Car {
     public static class CarUserData extends ObjectUserData {
-        final int fullHealth;
-        int currentHealth;
+        private final int fullHealth;
+        private int currentHealth;
         CarUserData(ContactType contactType, int fullHealth) {
             super(contactType);
             this.currentHealth = fullHealth;

@@ -23,18 +23,17 @@ import com.mygdx.game.objects.PlayerCar;
 import java.util.Arrays;
 
 public class PlayScreen extends ScreenAdapter {
-    Boot game;
-    OrthographicCamera camera;
-    Box2DDebugRenderer box2DDebugRenderer;
-    SpriteBatch batch;
-    GameContactListener gameContactListener;
-    World world;
-
-    PlayerCar playerCar;
-    Array<EnemyCar> enemyCarList;
-    Array<Bullet> bulletList;
-    ScoreKeeper scoreKeeper;
-    Background background;
+    private Boot game;
+    private OrthographicCamera camera;
+    private Box2DDebugRenderer box2DDebugRenderer;
+    private SpriteBatch batch;
+    private GameContactListener gameContactListener;
+    private World world;
+    private PlayerCar playerCar;
+    private Array<EnemyCar> enemyCarList;
+    private Array<Bullet> bulletList;
+    private ScoreKeeper scoreKeeper;
+    private Background background;
 
     public PlayScreen(Boot game){
         this.game = game;
