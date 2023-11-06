@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 
 public class AudioManager {
-    public static AudioManager INSTANCE;
     private static Sound shoot = Gdx.audio.newSound(Gdx.files.internal("audio/shoot.wav"));
     private static Sound enemyDied = Gdx.audio.newSound(Gdx.files.internal("audio/enemyDied.wav"));
     private static Sound gameOver = Gdx.audio.newSound(Gdx.files.internal("audio/gameover.wav"));

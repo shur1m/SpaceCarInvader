@@ -58,8 +58,4 @@ public class EnemyCar extends Car {
         playScreen.getWorld().destroyBody(body);
         playScreen.getEnemyCarList().removeValue(this, true);
     }
-
-    public Texture getTexture() {
-        return this.texture;
-    }
 }
