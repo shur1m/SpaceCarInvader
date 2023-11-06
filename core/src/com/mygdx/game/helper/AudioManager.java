@@ -4,11 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 
 public class AudioManager {
-    private static Sound shoot = Gdx.audio.newSound(Gdx.files.internal("audio/shoot.wav"));
-    private static Sound enemyDied = Gdx.audio.newSound(Gdx.files.internal("audio/enemyDied.wav"));
-    private static Sound gameOver = Gdx.audio.newSound(Gdx.files.internal("audio/gameover.wav"));
-    private static Sound takeDamage = Gdx.audio.newSound(Gdx.files.internal("audio/takeDamage.wav"));
-    private static Sound mainMenu = Gdx.audio.newSound(Gdx.files.internal("audio/mainMenu.wav"));
+    private static final Sound shoot = Gdx.audio.newSound(Gdx.files.internal("audio/shoot.wav"));
+    private static final Sound enemyDied = Gdx.audio.newSound(Gdx.files.internal("audio/enemyDied.wav"));
+    private static final Sound gameOver = Gdx.audio.newSound(Gdx.files.internal("audio/gameover.wav"));
+    private static final Sound takeDamage = Gdx.audio.newSound(Gdx.files.internal("audio/takeDamage.wav"));
+    private static final Sound mainMenu = Gdx.audio.newSound(Gdx.files.internal("audio/mainMenu.wav"));
 
     public static void playShoot() {
         shoot.play();
