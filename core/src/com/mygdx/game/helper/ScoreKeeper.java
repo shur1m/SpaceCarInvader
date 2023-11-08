@@ -10,10 +10,10 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.mygdx.game.PlayScreen;
 
 public class ScoreKeeper {
-    PlayScreen playScreen;
-    double score;
-    BitmapFont scoreFont;
-    GlyphLayout scoreGlyph;
+    private PlayScreen playScreen;
+    private double score;
+    private BitmapFont scoreFont;
+    private GlyphLayout scoreGlyph;
 
     public ScoreKeeper(PlayScreen playScreen) {
         this.playScreen = playScreen;

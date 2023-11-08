@@ -14,17 +14,17 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.helper.AudioManager;
 
 public class MainMenuScreen extends ScreenAdapter {
-    Boot game;
-    OrthographicCamera camera;
-    Box2DDebugRenderer box2DDebugRenderer;
-    SpriteBatch batch;
+    private Boot game;
+    private OrthographicCamera camera;
+    private Box2DDebugRenderer box2DDebugRenderer;
+    private SpriteBatch batch;
 
     // font parameters
-    float blinkTimer, blinkInterval = 1, lineHeight = 25;
+    private float blinkTimer, blinkInterval = 1, lineHeight = 25;
 
     // fonts
-    BitmapFont titleFont, pressToPlayFont;
-    GlyphLayout titleGlyph, pressToPlayGlyph;
+    private BitmapFont titleFont, pressToPlayFont;
+    private GlyphLayout titleGlyph, pressToPlayGlyph;
 
     public MainMenuScreen(Boot game){
         this.game = game;

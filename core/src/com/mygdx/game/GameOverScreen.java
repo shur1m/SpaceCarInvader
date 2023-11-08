@@ -18,21 +18,21 @@ import java.util.Arrays;
 
 public class GameOverScreen extends ScreenAdapter{
 
-    Boot game;
-    OrthographicCamera camera;
-    Box2DDebugRenderer box2DDebugRenderer;
-    SpriteBatch batch;
+    private Boot game;
+    private OrthographicCamera camera;
+    private Box2DDebugRenderer box2DDebugRenderer;
+    private SpriteBatch batch;
 
     // font parameters
-    float blinkTimer, blinkInterval = 1, lineHeight = 25;
+    private float blinkTimer, blinkInterval = 1, lineHeight = 25;
 
     // fonts
-    BitmapFont gameOverFont, restartFont, highScoreFont, youScoredFont;
-    GlyphLayout gameOverGlyph, restartGlyph, highScoreGlyph, youScoredGlyph;
-    boolean[] textIsVisible;
-    final int scoresShown = 3;
-    Array<Integer> highScores;
-    int latestScore;
+    private BitmapFont gameOverFont, restartFont, highScoreFont, youScoredFont;
+    private GlyphLayout gameOverGlyph, restartGlyph, highScoreGlyph, youScoredGlyph;
+    private boolean[] textIsVisible;
+    private final int scoresShown = 3;
+    private Array<Integer> highScores;
+    private int latestScore;
 
     public GameOverScreen(Boot game){
         this.game = game;
