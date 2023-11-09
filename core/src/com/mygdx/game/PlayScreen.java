@@ -1,12 +1,8 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -14,13 +10,17 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.background.Background;
 import com.mygdx.game.background.Road;
-import com.mygdx.game.helper.Const;
 import com.mygdx.game.helper.ScoreKeeper;
 import com.mygdx.game.objects.Bullet;
 import com.mygdx.game.objects.EnemyCar;
 import com.mygdx.game.objects.PlayerCar;
 
 import java.util.Arrays;
+
+/**
+ * Screen shown when playing the game. Displays sprites, background, score, and health.
+ * If the player loses, the screen is set to the GameOverScreen.
+ */
 
 public class PlayScreen extends ScreenAdapter {
     private Boot game;
@@ -35,6 +35,10 @@ public class PlayScreen extends ScreenAdapter {
     private ScoreKeeper scoreKeeper;
     private Background background;
 
+    /**
+     * The constructor of the PlayScreen. Creates Box2D world and performs initial setup.
+     * @param game
+     */
     public PlayScreen(Boot game){
         this.game = game;
         this.camera = new OrthographicCamera();
@@ -56,6 +60,10 @@ public class PlayScreen extends ScreenAdapter {
         camera.setToOrtho(false, game.getScreenWidth(), game.getScreenHeight());
     }
 
+    /**
+     * Updates the camera, sprites, score, and background before the screen is rendered.
+     * @param delta The time in seconds since the last render.
+     */
     private void update(float delta){
         world.step(1/60f, 6, 2);
 
@@ -63,7 +71,7 @@ public class PlayScreen extends ScreenAdapter {
         playerCar.update(delta);
         scoreKeeper.update(delta);
 
-        //add enemy cars when all are deallocated
+        // add enemy cars when all are deallocated
         createEnemies(1, 5, 0.1f, 1f);
 
         for (EnemyCar enemyCar : enemyCarList) { enemyCar.update(delta); }
@@ -72,6 +80,10 @@ public class PlayScreen extends ScreenAdapter {
         batch.setProjectionMatrix(camera.combined);
     }
 
+    /**
+     * Renders sprites, background, and text onto the screen 60 times per second.
+     * @param delta The time in seconds since the last render.
+     */
     public void render(float delta){
         update(delta);
         ScreenUtils.clear(0f, 0f, 0f,1);
@@ -84,9 +96,12 @@ public class PlayScreen extends ScreenAdapter {
         scoreKeeper.render(batch);
         batch.end();
 
-//        this.box2DDebugRenderer.render(world, camera.combined.scl(Const.PPM));
+        // this.box2DDebugRenderer.render(world, camera.combined.scl(Const.PPM));
 }
 
+    /**
+     * Performs cleanup before the object is destroyed.
+     */
     @Override
     public void dispose() {
         super.dispose();
@@ -96,6 +111,13 @@ public class PlayScreen extends ScreenAdapter {
         scoreKeeper.dispose();
     }
 
+    /**
+     * creates enemies when all existing enemies are deallocated.
+     * @param minCars The minimum enemies to create.
+     * @param maxCars The maximum enemies to create.
+     * @param minDescent The minimum descent speed of enemies.
+     * @param maxDescent The maximum descent speed of enemies.
+     */
     private void createEnemies(int minCars, int maxCars, float minDescent, float maxDescent){
         int roadWidth = Road.getTexture(0).getWidth();
         float leftMostRoadx = (float) game.getScreenWidth()/2 - (background.getRoadCount()/2) * roadWidth;
@@ -124,26 +146,50 @@ public class PlayScreen extends ScreenAdapter {
 
     }
 
+    /**
+     * Returns the Box2D world.
+     * @return Box2D world of this game.
+     */
     public World getWorld() {
         return world;
     }
 
+    /**
+     * Returns the instance of this game.
+     * @return Instance of this game.
+     */
     public Boot getGame() {
         return game;
     }
 
+    /**
+     * Returns the ScoreKeeper, which keeps track of, renders, and updates the score.
+     * @return ScoreKeeper of this game.
+     */
     public ScoreKeeper getScoreKeeper() {
         return scoreKeeper;
     }
 
+    /**
+     * Returns the current instance of the PlayerCar that the player controls.
+     * @return current instance of the PlayerCar.
+     */
     public PlayerCar getPlayerCar() {
         return playerCar;
     }
 
+    /**
+     * Returns a LibGDX Array of currently active EnemyCars.
+     * @return LibGDX Array of currently active EnemyCars.
+     */
     public Array<EnemyCar> getEnemyCarList() {
         return enemyCarList;
     }
 
+    /**
+     * Returns a LibGDX Array of currently active Bullets.
+     * @return LibGDX Array of currently active Bullets.
+     */
     public Array<Bullet> getBulletList() {
         return bulletList;
     }

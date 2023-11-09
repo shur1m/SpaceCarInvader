@@ -16,6 +16,12 @@ import com.badlogic.gdx.utils.Timer;
 
 import java.util.Arrays;
 
+/**
+ * Screen shown when the player car has no more health in the PlayScreen. Shows the score
+ * achieved by the player in the last game as well as the top 3 scores achieved in all games.
+ * If the user presses R, the screen is set back to the PlayScreen with a new game.
+ */
+
 public class GameOverScreen extends ScreenAdapter{
 
     private Boot game;
@@ -34,6 +40,10 @@ public class GameOverScreen extends ScreenAdapter{
     private Array<Integer> highScores;
     private int latestScore;
 
+    /**
+     * The constructor of the GameOverScreen. Performs initial setup.
+     * @param game The instance of the game.
+     */
     public GameOverScreen(Boot game){
         this.game = game;
         this.camera = new OrthographicCamera();
@@ -43,6 +53,9 @@ public class GameOverScreen extends ScreenAdapter{
         createText();
     }
 
+    /**
+     * Creates the BitMapFonts and GlyphLayouts needed to display text on the screen.
+     */
     private void createText(){
         this.highScores = getScores();
 
@@ -75,6 +88,9 @@ public class GameOverScreen extends ScreenAdapter{
         this.textIsVisible = new boolean[scoresShown+4];
     }
 
+    /**
+     * detects if R button is pressed, and sets screen to PlayScreen.
+     */
     private void update(){
         camera.update();
         batch.setProjectionMatrix(camera.combined);
@@ -83,6 +99,10 @@ public class GameOverScreen extends ScreenAdapter{
             game.setScreen(new PlayScreen(game));
     }
 
+    /**
+     * Renders all text onto the screen. A short delay is set between each line of text.
+     * @param delta The time in seconds since the last render.
+     */
     public void render(float delta){
         update();
 
@@ -117,9 +137,6 @@ public class GameOverScreen extends ScreenAdapter{
             currentY -= highScoreGlyph.height + lineHeight + 20;
         }
 
-
-
-
         for (int i = 0; i < scoresShown; ++i){
             if (textIsVisible[i+4]){
                 String score = (i+1 > highScores.size) ? "[empty]" : String.valueOf(highScores.get(i));
@@ -131,6 +148,10 @@ public class GameOverScreen extends ScreenAdapter{
         batch.end();
     }
 
+    /**
+     * Returns an array of high scores.
+     * @return LibGDX Array of scores sorted from highest to lowest.
+     */
     private Array<Integer> getScores() {
         String[] scoreStrings = Gdx.app.getPreferences("scores")
                 .getString("scoreString")
@@ -150,6 +171,9 @@ public class GameOverScreen extends ScreenAdapter{
         return scores;
     }
 
+    /**
+     * Resets data so that the transition is repeated and scores are updated.
+     */
     public void reset() {
         createText();
         this.blinkTimer = 0;

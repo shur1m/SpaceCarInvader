@@ -11,6 +11,11 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.PlayScreen;
 import com.mygdx.game.objects.Car;
 
+/**
+ * The background of the PlayScreen. Renders the roads, walls, control instructions,
+ * and player health. Roads and walls speed up and slow down depending on the
+ * in-game speed of the player car.
+ */
 public class Background {
     private Array<Road> roads;
     private PlayScreen playScreen;
@@ -19,6 +24,11 @@ public class Background {
     private BitmapFont controlsFont;
     private String[] controlMessages = { "[W] speed up", "[A] move left", "[D] move right", "[SPACE] shoot"};
 
+    /**
+     * The constructor of the Background.
+     * @param roadCount Number of roads to render. Does not include walls.
+     * @param playScreen The PlayScreen to render the background onto.
+     */
     public Background(int roadCount, PlayScreen playScreen){
         this.roads = new Array<>();
         this.playScreen = playScreen;
@@ -35,16 +45,28 @@ public class Background {
         this.controlsFont = playScreen.getGame().getFontGenerator().generateFont(controlsFontParameter);
     }
 
+    /**
+     * Updates the position of the background.
+     * @param delta The time in seconds since the last render.
+     */
     public void update(float delta) {
         for (Road road: roads) { road.update(delta); }
     }
 
+    /**
+     * Renders the background on to the screen.
+     * @param batch The SpriteBatch to render the background on.
+     */
     public void render(SpriteBatch batch) {
         for (Road road: roads) { road.render(batch); }
         renderHearts(batch);
         renderControls(batch);
     }
 
+    /**
+     * Creates the roads and walls in the background.
+     * @param n number of roads to create. Does not include walls.
+     */
     private void createRoads(int n) {
         Road middleRoad = new Road((float) playScreen.getGame().getScreenWidth()/2, playScreen);
         roads.add(middleRoad);
@@ -76,6 +98,9 @@ public class Background {
         roads.add(new Wall(rightWallx, playScreen, false));
     }
 
+    /**
+     * Renders the controls onto the screen.
+     */
     private void renderControls(SpriteBatch batch){
         final float x = 25;
         float y = 15;
@@ -84,6 +109,9 @@ public class Background {
             controlsFont.draw(batch, controlMessages[i], x, y+=25);
     }
 
+    /**
+     * Renders hearts representing the player health onto the screen.
+     */
     private void renderHearts(SpriteBatch batch){
         final int size = 52;
 
@@ -108,6 +136,10 @@ public class Background {
         }
     }
 
+    /**
+     * Returns the number of roads in the background.
+     * @return an integer equal to the number of roads in the background.
+     */
     public int getRoadCount() {
         return this.roads.size - 2;
     }

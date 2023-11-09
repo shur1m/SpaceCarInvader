@@ -7,14 +7,29 @@ import com.mygdx.game.objects.Bullet;
 import com.mygdx.game.objects.Car;
 import com.mygdx.game.objects.ObjectUserData;
 
+/**
+ * Detects if two objects in-game collide. This facilitates mechanics like bullets
+ * inflicting damage on enemy cars, and decreasing player car health when it collides with
+ * enemy cars. Other than beginContact, all other public methods are empty.
+ */
 public class GameContactListener implements ContactListener {
 
     private PlayScreen playScreen;
 
+    /**
+     * The constructor for GameContactListener.
+     * @param playScreen The Screen that owns this ContactListener.
+     */
     public GameContactListener(PlayScreen playScreen) {
         this.playScreen = playScreen;
     }
 
+    /**
+     * Called when two objects collide. Used to decrease enemy health when enemy cars collide with bullets,
+     * and to decrease player health when the player collides with enemy cars.
+     *
+     * @param contact the Contact object provided by libGDX that describes how and what two objects collided.
+     */
     @Override
     public void beginContact(Contact contact) {
         Fixture a = contact.getFixtureA();

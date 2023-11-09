@@ -13,11 +13,16 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.helper.AudioManager;
 
+/**
+ * Screen shown on boot. Displays title of game and instructions to start game. Sets
+ * the screen to the PlayScreen if the Space button is pressed.
+ */
+
 public class MainMenuScreen extends ScreenAdapter {
-    private Boot game;
-    private OrthographicCamera camera;
-    private Box2DDebugRenderer box2DDebugRenderer;
-    private SpriteBatch batch;
+    private final Boot game;
+    private final OrthographicCamera camera;
+    private final Box2DDebugRenderer box2DDebugRenderer;
+    private final SpriteBatch batch;
 
     // font parameters
     private float blinkTimer, blinkInterval = 1, lineHeight = 25;
@@ -26,6 +31,10 @@ public class MainMenuScreen extends ScreenAdapter {
     private BitmapFont titleFont, pressToPlayFont;
     private GlyphLayout titleGlyph, pressToPlayGlyph;
 
+    /**
+     * The constructor of MainMenuScreen.
+     * @param game The instance of the game.
+     */
     public MainMenuScreen(Boot game){
         this.game = game;
         this.camera = new OrthographicCamera();
@@ -36,6 +45,9 @@ public class MainMenuScreen extends ScreenAdapter {
         createText();
     }
 
+    /**
+     * Creates the BitMapFonts and GlyphLayouts needed to display text on the screen.
+     */
     private void createText(){
         FreeTypeFontParameter titleFontParameter = new FreeTypeFontParameter();
         titleFontParameter.size = 30;
@@ -50,6 +62,9 @@ public class MainMenuScreen extends ScreenAdapter {
         this.pressToPlayGlyph = new GlyphLayout(pressToPlayFont, "[Press SPACE to play]");
     }
 
+    /**
+     * Detects if the Space button is pressed. If it is, sets the screen to the PlayScreen.
+     */
     private void update(){
         camera.update();
         batch.setProjectionMatrix(camera.combined);
@@ -60,6 +75,10 @@ public class MainMenuScreen extends ScreenAdapter {
         }
     }
 
+    /**
+     * Renders text onto the screen. Blinks "Press space to play" button.
+     * @param delta The time in seconds since the last render.
+     */
     public void render(float delta){
         update();
         ScreenUtils.clear(0, 0, 0, 1);
@@ -78,7 +97,5 @@ public class MainMenuScreen extends ScreenAdapter {
             blinkTimer = 0;
 
         batch.end();
-
-//      this.box2DDebugRenderer.render(world, camera.combined.scl(Const.PPM));
     }
 }

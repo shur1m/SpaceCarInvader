@@ -15,6 +15,12 @@ public class PlayerCar extends Car {
     private float inGameVelocity = 0;
     private static final float maxInGameVelocity = 1.5f;
 
+    /**
+     * The constructor of PlayerCar.
+     * @param x x-coordinate, measured in pixels, of the PlayerCar.
+     * @param y y-coordinate, measured in pixels, of the PlayerCar.
+     * @param playScreen The screen to render the PlayerCar on.
+     */
     public PlayerCar(float x, float y, PlayScreen playScreen) {
         super(x, y, playScreen);
         float ratio = 0.35f;
@@ -25,6 +31,10 @@ public class PlayerCar extends Car {
         this.body = BodyHelper.createBody(x, y, width-10, height-40, false, 100, playScreen.getWorld(), userData);
     }
 
+    /**
+     * Update the position of the player car to match that of the Box2D body and also respond to user controls.
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void update(float delta) {
         super.update(delta);
@@ -82,11 +92,18 @@ public class PlayerCar extends Car {
         body.setLinearVelocity(velX * speedX, velY * speedY);
     }
 
+    /**
+     * Shoot a bullet from the top of the PlayerCar. Creates a Bullet instance and plays the corresponding sound.
+     */
     public void shootBullet(){
         AudioManager.playShoot();
         playScreen.getBulletList().add(new Bullet(x + width/2, y + height + Bullet.height, playScreen));
     }
 
+    /**
+     * Returns the in-game velocity, which represents how fast the player car is going.
+     * @return the in-game velocity.
+     */
     public float getInGameVelocity() {
         return inGameVelocity;
     }

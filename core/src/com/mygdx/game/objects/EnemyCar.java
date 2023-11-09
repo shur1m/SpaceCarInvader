@@ -8,6 +8,11 @@ import com.mygdx.game.helper.AudioManager;
 import com.mygdx.game.helper.BodyHelper;
 import com.mygdx.game.helper.ContactType;
 
+/**
+ * Represents an enemy car in the game. Has three different colors, and the
+ * speed of the cars can be changed.
+ */
+
 public class EnemyCar extends Car {
     private static Texture[] textures = {
             new Texture("redCar.png"),
@@ -17,6 +22,13 @@ public class EnemyCar extends Car {
     private TextureRegion[] healthSpriteSheet;
     private float descentSpeed;
 
+    /**
+     * Constructor of EnemyCar
+     * @param x x-position, in pixels, of the enemy car.
+     * @param y y-position, in pixels, of the enemy car.
+     * @param descentSpeed Speed of the car. The higher the value, the faster the car moves towards the bottom of the screen.
+     * @param playScreen Screen to render the enemy car on.
+     */
     public EnemyCar(float x, float y, float descentSpeed, PlayScreen playScreen) {
         super(x, y, playScreen);
         this.texture = this.textures[(int)(Math.random() * 3)];
@@ -32,6 +44,11 @@ public class EnemyCar extends Car {
         this.healthSpriteSheet = TextureRegion.split(healthBarTexture, healthBarTexture.getWidth()/3, healthBarTexture.getHeight())[0];
     }
 
+    /**
+     * Update the position of the car to match the position of the Box2D body.
+     * Deletes the car if the car has no more health or has exited the viewport.
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void update(float delta) {
         super.update(delta);
@@ -44,6 +61,10 @@ public class EnemyCar extends Car {
         }
     }
 
+    /**
+     * Render the EnemyCar onto the screen. Renders a health bar if the car is not at full health.
+     * @param batch The SpriteBatch to render on.
+     */
     @Override
     public void render(SpriteBatch batch) {
         super.render(batch);
@@ -54,6 +75,9 @@ public class EnemyCar extends Car {
         }
     }
 
+    /**
+     * Perform cleanup tasks before deallocation.
+     */
     public void dispose() {
         playScreen.getWorld().destroyBody(body);
         playScreen.getEnemyCarList().removeValue(this, true);
