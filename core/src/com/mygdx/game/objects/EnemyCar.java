@@ -57,6 +57,8 @@ public class EnemyCar extends Car {
         body.setLinearVelocity(velX * speedX, velY * speedY);
 
         if (y < -300 || userData.getCurrentHealth() <= 0) {
+            if (userData.getCurrentHealth() <= 0)
+                explode();
             dispose();
         }
     }
@@ -81,5 +83,12 @@ public class EnemyCar extends Car {
     public void dispose() {
         playScreen.getWorld().destroyBody(body);
         playScreen.getEnemyCarList().removeValue(this, true);
+    }
+
+    /**
+     * creates explosion animation in background
+     */
+    private void explode() {
+        playScreen.getBackground().createExplosion(x + (float) width/2 , y - (float)height/2);
     }
 }

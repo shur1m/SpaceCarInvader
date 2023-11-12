@@ -3,7 +3,6 @@ package com.mygdx.game.background;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -12,17 +11,18 @@ import com.mygdx.game.PlayScreen;
 import com.mygdx.game.objects.Car;
 
 /**
- * The background of the PlayScreen. Renders the roads, walls, control instructions,
+ * The background of the PlayScreen. Renders the roads, walls, explosions, control instructions,
  * and player health. Roads and walls speed up and slow down depending on the
  * in-game speed of the player car.
  */
 public class Background {
-    private Array<Road> roads;
-    private PlayScreen playScreen;
-    private TextureRegion filledHeart;
-    private TextureRegion emptyHeart;
-    private BitmapFont controlsFont;
-    private String[] controlMessages = { "[W] speed up", "[A] move left", "[D] move right", "[SPACE] shoot"};
+    private final Array<Road> roads;
+    private final Array<Explosion> explosions;
+    private final PlayScreen playScreen;
+    private final TextureRegion filledHeart;
+    private final TextureRegion emptyHeart;
+    private final BitmapFont controlsFont;
+    private final String[] controlMessages = { "[W] speed up", "[A] move left", "[D] move right", "[SPACE] shoot"};
 
     /**
      * The constructor of the Background.
@@ -43,6 +43,8 @@ public class Background {
         controlsFontParameter.color = Color.WHITE;
         controlsFontParameter.size = 20;
         this.controlsFont = playScreen.getGame().getFontGenerator().generateFont(controlsFontParameter);
+
+        this.explosions = new Array<>();
     }
 
     /**
@@ -51,6 +53,7 @@ public class Background {
      */
     public void update(float delta) {
         for (Road road: roads) { road.update(delta); }
+        for (Explosion explosion: explosions) { explosion.update(delta); }
     }
 
     /**
@@ -59,6 +62,7 @@ public class Background {
      */
     public void render(SpriteBatch batch) {
         for (Road road: roads) { road.render(batch); }
+        for (Explosion explosion: explosions) { explosion.render(batch); }
         renderHearts(batch);
         renderControls(batch);
     }
@@ -96,6 +100,16 @@ public class Background {
         float rightWallx = rightRoadx + (float)(Road.getTexture(-1).getWidth() + Road.getTexture(-2).getWidth())/2;
         roads.add(new Wall(leftWallx, playScreen, true));
         roads.add(new Wall(rightWallx, playScreen, false));
+    }
+
+    /**
+     * Creates an explosion animation in the background in the coordinates specified.
+     * @param x x-position, measured in pixels, of explosion created.
+     * @param y x-position, measured in pixels, of explosion created.
+     */
+    public void createExplosion(float x, float y){
+        //todo need to specify location of explosion
+        explosions.add(new Explosion(x, y, this));
     }
 
     /**
@@ -142,5 +156,13 @@ public class Background {
      */
     public int getRoadCount() {
         return this.roads.size - 2;
+    }
+
+    /**
+     * Returns Array of active explosion animations in the background.
+     * @return LibGDX array of active explosions.
+     */
+    public Array<Explosion> getExplosions() {
+        return explosions;
     }
 }

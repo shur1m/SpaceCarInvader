@@ -193,4 +193,8 @@ public class PlayScreen extends ScreenAdapter {
     public Array<Bullet> getBulletList() {
         return bulletList;
     }
+
+    public Background getBackground() {
+        return background;
+    }
 }
